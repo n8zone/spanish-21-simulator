@@ -73,8 +73,18 @@ function surrender() {
 
 function dealerPlay(deck, dealerHand) {
 
-  while (calculateHandValue(dealerHand) < 17) {
+  while (calculateHandValue(dealerHand) < 17) { // dealer should hit on soft 17s
     hit(deck, dealerHand);
+  }
+
+  let dealerFinalValue = calculateHandValue(dealerHand);
+  // check for uncollapsed ace
+  if (dealerFinalValue === 17) {
+    for (const card in dealerHand) {
+      if (card.value === 'A') {
+        hit(deck, dealerHand);
+      }
+    }
   }
 
   return dealerHand;
@@ -113,9 +123,3 @@ function playGame(numDecks = 6) {
   console.log(winner);
 
 }
-
-// game loop will have to be modified
-// instead of just drawing cards until busting the game will be controlled by the user
-// button to hit, stand, double down, and surrender
-
-//playGame();

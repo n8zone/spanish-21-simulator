@@ -1,69 +1,76 @@
+// to be frank, I don't like this too much and I need to improve it.
+
 document.addEventListener('DOMContentLoaded', (event) => {
-  const gameElement = document.getElementById('game');
+	const gameElement = document.getElementById('game');
 
-  const dealerCardArea = document.getElementById('dealer-cards');
-  const playerCardArea = document.getElementById('player-cards');
+	const dealerCardArea = document.getElementById('dealer-cards');
+	const dealerTotalValue = document.getElementById('dealer-total-value');
 
-  const playerHitBtn = document.getElementById('player-hit-btn');
-  const playerStandBtn = document.getElementById('player-stand-btn');
-  const playerTotalValue = document.getElementById('player-total-value');
-  
-  
-  let deck = createDeck()
-  let { playerHand, dealerHand } = initialDeal(deck)
-
-  console.log("Player : ", playerHand);
-  console.log("Dealer Up: ", dealerHand[0]);
-
-  console.log("Player : ", playerHand, calculateHandValue(playerHand));
-
-  //let testHand = [{ value: 5, suit: 'test' }, { value: 3, suit: 'test' }, {value: 'A', suit: 'test' }, { value: 4, suit: 'test' }]
-
-  //console.log("Test : ", testHand, calculateHandValue(testHand));
+	const playerCardArea = document.getElementById('player-cards');
+	const playerHitBtn = document.getElementById('player-hit-btn');
+	const playerStandBtn = document.getElementById('player-stand-btn');
+	const playerTotalValue = document.getElementById('player-total-value');
+	
+	
+	let deck = createDeck()
+	let { playerHand, dealerHand } = initialDeal(deck)
 
 
-  dealerCardArea.appendChild(constructCard(dealerHand[0]));
+	dealerCardArea.appendChild(constructCard(dealerHand[0]));
 
-  function constructCard(card) {
-    let cardElement = document.createElement('p') // for now... should probably change
-    cardElement.classList.add('card');
-    
-    cardElement.innerText = `${card.value} of ${card.suit}`;
+	function constructCard(card) {
+		let cardElement = document.createElement('p') // for now... should probably change
+		cardElement.classList.add('card');
+		
+		cardElement.innerText = `${card.value} of ${card.suit}`;
 
-    return cardElement;
-  }
+		return cardElement;
+	}
 
-  function revealDealerCard() {
-    
-  }
+	function revealDealerCard() {
+		
+	}
 
-  function refreshDealerCards() {
-    dealerCardArea.innerHTML = '';
-    let dealerHandElement = document.createElement('p');
-    dealerHandElement.innerText = `${dealerHand[0].value} of ${dealerHand[0].suit}`;
-    dealerCardArea.appendChild(dealerHandElement);
-  }
+	function refreshDealerCards() {
+		dealerCardArea.innerHTML = '';
+		let dealerHandElement = document.createElement('p');
+		dealerHandElement.innerText = `${dealerHand[0].value} of ${dealerHand[0].suit}`;
+		dealerCardArea.appendChild(dealerHandElement);
+	}
 
-  function refreshPlayerCards() {
-    playerCardArea.innerHTML = '';
-  
-    for (const card of playerHand) {
-      playerCardArea.appendChild(constructCard(card));
-    }
-    playerTotalValue.innerText = `Total Value: ${calculateHandValue(playerHand)}`;
-  }
+	function refreshCardArea(cardArea, hand) {
+		cardArea.innerHTML = '';
+
+		for (const card of hand) {
+			cardArea.appendChild(constructCard(card));
+		}
+
+		playerTotalValue.innerText = `Total Value: ${calculateHandValue(playerHand)}`;
+		
+	}
 
 
-  playerHitBtn.addEventListener('click', (e) => {
-    hit(deck, playerHand);
-    
-    refreshPlayerCards(); // this is jank, change later
+	playerHitBtn.addEventListener('click', (e) => {
+		hit(deck, playerHand);
 
-  })
+		refreshCardArea(playerCardArea, playerHand);
 
-  playerStandBtn.addEventListener('click', (e) => {
-    dealerPlay(deck, dealerHand);
-  })
+	})
 
-  refreshPlayerCards();
+	playerStandBtn.addEventListener('click', (e) => {
+		// When player stands, reveal dealer's down card and then:
+		// if dealer's hand is < 17, dealer hit, otherwise determine winner.
+
+		refreshCardArea(dealerCardArea, dealerHand);
+		
+		dealerPlay(deck, dealerHand);
+		refreshCardArea(dealerCardArea, dealerHand);
+		dealerTotalValue.innerText = `Total Value: ${calculateHandValue(dealerHand)}`;
+
+		setTimeout(() => {
+			alert(determineWinner(playerHand, dealerHand))
+		}, 100);
+	})
+
+	refreshCardArea(playerCardArea, playerHand);
 })
