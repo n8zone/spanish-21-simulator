@@ -1,7 +1,6 @@
 // to be frank, I don't like this too much and I need to improve it.
 
 document.addEventListener('DOMContentLoaded', (event) => {
-	const gameElement = document.getElementById('game');
 
 	const dealerCardArea = document.getElementById('dealer-cards');
 	const dealerTotalValue = document.getElementById('dealer-total-value');
@@ -29,17 +28,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		return cardElement;
 	}
 
-	function revealDealerCard() {
-		
-	}
-
-	function refreshDealerCards() {
-		dealerCardArea.innerHTML = '';
-		let dealerHandElement = document.createElement('p');
-		dealerHandElement.innerText = `${dealerHand[0].value} of ${dealerHand[0].suit}`;
-		dealerCardArea.appendChild(dealerHandElement);
-	}
-
 	function refreshCardArea(cardArea, hand) {
 		cardArea.innerHTML = '';
 
@@ -55,7 +43,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		
 	}
 
-
 	playerHitBtn.addEventListener('click', (e) => {
 		hit(deck, playerHand);
 
@@ -66,7 +53,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	playerStandBtn.addEventListener('click', (e) => {
 		// When player stands, reveal dealer's down card and then:
 		// if dealer's hand is < 17, dealer hit, otherwise determine winner.
-		
+
 		bRevealDealer = true;
 		refreshCardArea(dealerCardArea, dealerHand);
 		
