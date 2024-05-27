@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	let deck = createDeck()
 	let { playerHand, dealerHand } = initialDeal(deck)
 
+	let bRevealDealer = false;
+
 
 	dealerCardArea.appendChild(constructCard(dealerHand[0]));
 
@@ -46,6 +48,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		}
 
 		playerTotalValue.innerText = `Total Value: ${calculateHandValue(playerHand)}`;
+
+		if (bRevealDealer) {
+			dealerTotalValue.innerText = `Total Value: ${calculateHandValue(dealerHand)}`;
+		}
 		
 	}
 
@@ -60,12 +66,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	playerStandBtn.addEventListener('click', (e) => {
 		// When player stands, reveal dealer's down card and then:
 		// if dealer's hand is < 17, dealer hit, otherwise determine winner.
-
+		
+		bRevealDealer = true;
 		refreshCardArea(dealerCardArea, dealerHand);
 		
 		dealerPlay(deck, dealerHand);
 		refreshCardArea(dealerCardArea, dealerHand);
-		dealerTotalValue.innerText = `Total Value: ${calculateHandValue(dealerHand)}`;
+		
 
 		setTimeout(() => {
 			alert(determineWinner(playerHand, dealerHand))
