@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	playerStandBtn.addEventListener('click', (e) => {
 		// When player stands, reveal dealer's down card and then:
 		// if dealer's hand is < 17, dealer hit, otherwise determine winner.
+		// this logic happens in the app.js
 
 		bRevealDealer = true;
 		refreshCardArea(dealerCardArea, dealerHand);
